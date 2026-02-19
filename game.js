@@ -8,12 +8,12 @@ const CONFIG = {
   assets: { bg: "assets/bg_room.png", sprite: (key, state) => `assets/characters/${key}_${state}.png` },
   characters: [
     { key:"boss", name:"老闆", color:"#2c14a3", bio:"怪談出版社的老闆，缺乏靈感而參加百物語",
-      skill1:{ name:"怪談化身", desc:"擲1d8，結果×3", usesPerGame:4,
-        action(ctx){ const r=rollDie(8); return { text:"老闆把故事扯得更黑、更長，他哪來這麼多奇怪故事？", rollValue:r, deltaToTotal:r*3, sprite:"skill1" }; } },
-      skill2:{ name:"高壓催稿", desc:"所有人下一次擲骰=1d20", usesPerGame:1,
-        action(ctx){ ctx.state.global.nextDieAll={sides:20,remaining:ctx.state.order.length}; return { text:"「這樣的進度不行啊，每個人多貢獻一點故事吧。」", rollValue:null, deltaToTotal:0, sprite:"skill2" }; } } },
+      skill1:{ name:"怪談化身", desc:"擲1d10，結果×3", usesPerGame:3,
+        action(ctx){ const r=rollDie(10); return { text:"老闆把故事扯得更黑、更長，他哪來這麼多奇怪故事？", rollValue:r, deltaToTotal:r*3, sprite:"skill1" }; } },
+      skill2:{ name:"高壓催稿", desc:"自己擲1d15，所有人下一次擲骰=1d20", usesPerGame:2,
+        action(ctx){ const r= rollDie(15) ;ctx.state.global.nextDieAll = {sides:20,remaining:ctx.state.order.length}; return { text:"「這樣的進度不行啊，每個人多貢獻一點故事吧。」", rollValue:r, deltaToTotal:r, sprite:"skill2" }; } } },
     { key:"sister", name:"姊姊", color:"#b84098", bio:"老闆的大女兒，半夜睡不著來陪玩",
-      skill1:{ name:"化險為夷", desc:"擲1d5，本回合-1，下一位+1", usesPerGame:3,
+      skill1:{ name:"化險為夷", desc:"擲1d5，本回合-1，下一位+1", usesPerGame:2,
         action(ctx){ const r=rollDie(5); const next=getNextActorKey(ctx.state); ctx.state.global.nextBonus[next]=(ctx.state.global.nextBonus[next]??0)+1;
           return { text:"姊姊把話尾輕輕推給下一位。", rollValue:r, deltaToTotal:Math.max(0,r-1), sprite:"skill1", extraLog:"（姊姊：本回合-1，下一位+1）" }; } },
       skill2:{ name:"送上點心", desc:"怪談度-1d10", usesPerGame:2,
@@ -26,13 +26,32 @@ const CONFIG = {
     { key:"drunk", name:"酒鬼", color:"#388f76", bio:"出版社的寫手作家，酗酒太郎",
       skill1:{ name:"飲酒過度", desc:"強制擲出15", usesPerGame:3,
         action(ctx){ const r=15; return { text:"酒氣黏著喉嚨往外冒，酒鬼講出了不得了的怪談。", rollValue:r, deltaToTotal:r, sprite:"skill1" }; } },
-      skill2:{ name:"勸酒", desc:"所有人下一次擲骰結果+5", usesPerGame:1,
-        action(ctx){ ctx.state.global.nextAddAll={add:5,remaining:ctx.state.order.length}; return { text:"「哎～大家多喝點酒啦～這樣才有興致說嘛～」", rollValue:null, deltaToTotal:0, sprite:"skill2" }; } } },
+      skill2:{ name:"勸酒", desc:"所有人下一次擲骰結果+1~+10", usesPerGame:1,
+        action(ctx){
+    // 隨機 1~10
+    const add = rollDie(10);
+    ctx.state.global.nextAddAll = {
+      add:add,
+      remaining:ctx.state.order.length
+    };
+    return {
+      text:`「哎～大家多喝點酒啦～這樣才有興致說嘛～」（+${add}）`,
+      rollValue:null,
+      deltaToTotal:0,
+      sprite:"skill2" }; } } },
     { key:"cop", name:"警察", color:"#383838", bio:"半夜巡邏經過出版社的警察，來陪玩",
       skill1:{ name:"一言不發", desc:"本回合=0", usesPerGame:1,
         action(ctx){ return { text:"警察沉默地看著所有人。", rollValue:0, deltaToTotal:0, sprite:"skill1" }; } },
-      skill2:{ name:"視線壓迫", desc:"下一個人擲骰×2）", usesPerGame:1,
-        action(ctx){ ctx.state.global.nextMulNext=2; return { text:"視線像手銬扣在下一個人身上。", rollValue:null, deltaToTotal:0, sprite:"skill2" }; } } },
+      skill2:{ name:"視線壓迫", desc:"下一個人擲骰×2~3）", usesPerGame:1,
+        action(ctx){
+    // 隨機 2 或 3
+    const mul = rollDie(2) + 1; // 1d2 +1 = 2~3
+    ctx.state.global.nextMulNext = mul;
+    return {
+      text:`視線像手銬扣在下一個人身上（×${mul}）。`,
+      rollValue:null,
+      deltaToTotal:0,
+      sprite:"skill2" }; } } },
     { key:"detective", name:"偵探", color:"#d6bcd1", bio:"怪談出版社作品的粉絲，可樂餅信徒",
       skill1:{ name:"偵探直覺", desc:"怪談度-10~+10", usesPerGame:3,
         action(ctx){ const r=randint(-10,10); return { text:"「嗯……這段有點不對勁。」", rollValue:r, deltaToTotal:r, sprite:"skill1" }; } },
