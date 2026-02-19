@@ -13,7 +13,7 @@ const CONFIG = {
       skill2:{ name:"高壓催稿", desc:"所有人下一次擲骰=1d10", usesPerGame:3,
         action(ctx){ ctx.state.global.nextDieAll={sides:10,remaining:ctx.state.order.length}; return { text:"「這樣的進度不行啊，每個人多貢獻一點故事吧。」", rollValue:null, deltaToTotal:0, sprite:"skill2" }; } } },
     { key:"sister", name:"姊姊", color:"#b84098", bio:"老闆的大女兒，半夜睡不著來陪玩",
-      skill1:{ name:"化險為夷", desc:"擲1d5，本回合-1，下一位+1（2次）", usesPerGame:3,
+      skill1:{ name:"化險為夷", desc:"擲1d5，本回合-1，下一位+1", usesPerGame:3,
         action(ctx){ const r=rollDie(5); const next=getNextActorKey(ctx.state); ctx.state.global.nextBonus[next]=(ctx.state.global.nextBonus[next]??0)+1;
           return { text:"姊姊把話尾輕輕推給下一位。", rollValue:r, deltaToTotal:Math.max(0,r-1), sprite:"skill1", extraLog:"（姊姊：本回合-1，下一位+1）" }; } },
       skill2:{ name:"送上點心", desc:"怪談度-1d10", usesPerGame:2,
@@ -24,7 +24,7 @@ const CONFIG = {
       skill2:{ name:"送上點心？", desc:"怪談度-10~+15", usesPerGame:2,
         action(ctx){ const r=randint(-10,10); return { text:"妹妹拿出了不明點心分給大家，好像可以減輕不安，又好像更可疑。", rollValue:r, deltaToTotal:r, sprite:"skill2" }; } } },
     { key:"drunk", name:"酒鬼", color:"#388f76", bio:"出版社的寫手作家，酗酒太郎",
-      skill1:{ name:"飲酒過度", desc:"強制擲出10（2次）", usesPerGame:3,
+      skill1:{ name:"飲酒過度", desc:"強制擲出10", usesPerGame:3,
         action(ctx){ const r=10; return { text:"酒氣黏著喉嚨往外冒，酒鬼講出了不得了的怪談。", rollValue:r, deltaToTotal:r, sprite:"skill1" }; } },
       skill2:{ name:"勸酒", desc:"所有人下一次擲骰結果+5", usesPerGame:3,
         action(ctx){ ctx.state.global.nextAddAll={add:5,remaining:ctx.state.order.length}; return { text:"「哎～大家多喝點酒啦～這樣才有興致說嘛～」", rollValue:null, deltaToTotal:0, sprite:"skill2" }; } } },
