@@ -24,8 +24,8 @@ const CONFIG = {
       skill2:{ name:"送上點心？", desc:"怪談度-10~+15", usesPerGame:2,
         action(ctx){ const r=randint(-10,15); return { text:"妹妹拿出了不明點心分給大家，好像可以減輕不安，又好像更可疑。", rollValue:r, deltaToTotal:r, sprite:"skill2" }; } } },
     { key:"drunk", name:"酒鬼", color:"#388f76", bio:"出版社的寫手作家，酗酒太郎",
-      skill1:{ name:"飲酒過度", desc:"強制擲出10", usesPerGame:3,
-        action(ctx){ const r=10; return { text:"酒氣黏著喉嚨往外冒，酒鬼講出了不得了的怪談。", rollValue:r, deltaToTotal:r, sprite:"skill1" }; } },
+      skill1:{ name:"飲酒過度", desc:"強制擲出15", usesPerGame:3,
+        action(ctx){ const r=15; return { text:"酒氣黏著喉嚨往外冒，酒鬼講出了不得了的怪談。", rollValue:r, deltaToTotal:r, sprite:"skill1" }; } },
       skill2:{ name:"勸酒", desc:"所有人下一次擲骰結果+5", usesPerGame:1,
         action(ctx){ ctx.state.global.nextAddAll={add:5,remaining:ctx.state.order.length}; return { text:"「哎～大家多喝點酒啦～這樣才有興致說嘛～」", rollValue:null, deltaToTotal:0, sprite:"skill2" }; } } },
     { key:"cop", name:"警察", color:"#383838", bio:"半夜巡邏經過出版社的警察，來陪玩",
@@ -36,8 +36,8 @@ const CONFIG = {
     { key:"detective", name:"偵探", color:"#d6bcd1", bio:"怪談出版社作品的粉絲，可樂餅信徒",
       skill1:{ name:"偵探直覺", desc:"怪談度-10~+10", usesPerGame:3,
         action(ctx){ const r=randint(-10,10); return { text:"「嗯……這段有點不對勁。」", rollValue:r, deltaToTotal:r, sprite:"skill1" }; } },
-      skill2:{ name:"分享可樂餅", desc:"自身=0；另擲1d8加到下一位", usesPerGame:1,
-        action(ctx){ const r=rollDie(8); const next=getNextActorKey(ctx.state); ctx.state.global.nextBonus[next]=(ctx.state.global.nextBonus[next]??0)+r;
+      skill2:{ name:"分享可樂餅", desc:"自身=0；另擲1d10加到下一位", usesPerGame:1,
+        action(ctx){ const r=rollDie(10); const next=getNextActorKey(ctx.state); ctx.state.global.nextBonus[next]=(ctx.state.global.nextBonus[next]??0)+r;
           return { text:"「你講一定更可怕吧？」", rollValue:0, deltaToTotal:0, sprite:"skill2", extraLog:`（偵探：下一位擲骰 +${r}）` }; } } },
     { key:"reporter", name:"記者", color:"#517a94", bio:"常來出版社打聽小道消息的記者，來陪玩",
       skill1:{ name:"對答如流", desc:"用前一位的擲骰當本次擲骰結果", usesPerGame:3,
