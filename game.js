@@ -31,7 +31,7 @@ const CONFIG = {
     { key:"cop", name:"警察", color:"#383838", bio:"半夜巡邏經過出版社的警察，來陪玩",
       skill1:{ name:"一言不發", desc:"本回合=0", usesPerGame:1,
         action(ctx){ return { text:"警察沉默地看著所有人。", rollValue:0, deltaToTotal:0, sprite:"skill1" }; } },
-      skill2:{ name:"視線壓迫", desc:"下一個人擲骰×2）", usesPerGame:3,
+      skill2:{ name:"視線壓迫", desc:"下一個人擲骰×2）", usesPerGame:1,
         action(ctx){ ctx.state.global.nextMulNext=2; return { text:"視線像手銬扣在下一個人身上。", rollValue:null, deltaToTotal:0, sprite:"skill2" }; } } },
     { key:"detective", name:"偵探", color:"#d6bcd1", bio:"怪談出版社作品的粉絲，可樂餅信徒",
       skill1:{ name:"偵探直覺", desc:"怪談度-10~+10", usesPerGame:3,
